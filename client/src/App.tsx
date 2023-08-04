@@ -79,7 +79,8 @@ function App() {
       //save user to MongoDB...
       if (profileObj) {
         const response = await fetch(
-          "http://localhost:8080/api/v1/superAdmins",
+          // "http://localhost:8080/api/v1/superAdmins",
+          "https://greetgrid-admin.onrender.com/api/v1/superAdmins",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -180,7 +181,9 @@ function App() {
           <RefineSnackbarProvider>
             <Refine
               // dataProvider={dataProvider("http://localhost:8080/api/v1")}
-              dataProvider={dataProvider("http://localhost:8080/api/v1")}
+              dataProvider={dataProvider(
+                "https://greetgrid-admin.onrender.com/api/v1"
+              )}
               notificationProvider={notificationProvider}
               routerProvider={routerBindings}
               authProvider={authProvider}

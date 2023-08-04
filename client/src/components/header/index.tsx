@@ -40,14 +40,14 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
             justifyContent="flex-end"
             alignItems="center"
           >
-            {/* <IconButton
+            <IconButton
               color="inherit"
               onClick={() => {
                 setMode();
               }}
             >
               {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
-            </IconButton> */}
+            </IconButton>
 
             {(user?.avatar || user?.name) && (
               <Stack
