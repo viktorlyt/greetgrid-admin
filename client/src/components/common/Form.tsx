@@ -3,14 +3,14 @@ import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-import Stack from "@mui/material/Stack";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
 
 import { FormProps } from "interfaces/common";
 import CustomButton from "./CustomButton";
+import { useForm } from "@refinedev/react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { newAdinSchema } from "schemas/schema";
 
 const Form = ({
   type,
@@ -19,6 +19,10 @@ const Form = ({
   formLoading,
   onFinishHandler,
 }: FormProps) => {
+  const {
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(newAdinSchema) });
+
   return (
     <Box>
       <Typography fontSize={25} fontWeight={700} color="#11142d">
@@ -50,12 +54,16 @@ const Form = ({
             <TextField
               fullWidth
               required
+              focused
               placeholder="Enter name"
               id="outlined-basic"
               color="info"
               variant="outlined"
               {...register("name", { required: true })}
             />
+            {errors.name && (
+              <FormHelperText error>{errors.name?.message}</FormHelperText>
+            )}
           </FormControl>
           <FormControl>
             <FormHelperText
@@ -71,6 +79,7 @@ const Form = ({
             <TextField
               fullWidth
               required
+              type="email"
               placeholder="Enter email"
               color="info"
               {...register("email", { required: true })}
@@ -95,8 +104,12 @@ const Form = ({
               color="info"
               type="password"
               variant="outlined"
+              // onChange={(e) => setPassword(e.target.value)}
               {...register("password", { required: true })}
             />
+            {errors.password && (
+              <FormHelperText error>{errors.password?.message}</FormHelperText>
+            )}
           </FormControl>
           <FormControl>
             <FormHelperText
@@ -117,8 +130,16 @@ const Form = ({
               color="info"
               type="password"
               variant="outlined"
-              {...register("confirmPassword", { required: true })}
+              // onChange={(e) => setConfirmPassword(e.target.value)}
+              {...register("confirmPassword", {
+                required: true,
+              })}
             />
+            {errors.confirmPassword && (
+              <FormHelperText error>
+                {errors.confirmPassword?.message}
+              </FormHelperText>
+            )}
           </FormControl>
           <FormControl sx={{ flex: 1 }}>
             <FormHelperText
