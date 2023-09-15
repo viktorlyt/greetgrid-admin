@@ -11,13 +11,16 @@ import CustomButton from "./CustomButton";
 import { useForm } from "@refinedev/react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { newAdinSchema } from "schemas/schema";
+import { Button, Stack, TextareaAutosize } from "@mui/material";
 
 const Form = ({
   type,
   register,
   handleSubmit,
   formLoading,
+  handleImageChange,
   onFinishHandler,
+  propertyImage,
 }: FormProps) => {
   const {
     formState: { errors },
@@ -26,7 +29,7 @@ const Form = ({
   return (
     <Box>
       <Typography fontSize={25} fontWeight={700} color="#11142d">
-        {type} an Admin
+        {type} a Property
       </Typography>
 
       <Box mt={2.5} borderRadius="15px" padding="20px" bgcolor="#fcfcfc">
@@ -49,17 +52,17 @@ const Form = ({
                 color: "#11142d",
               }}
             >
-              Name
+              Property name
             </FormHelperText>
             <TextField
               fullWidth
               required
               focused
-              placeholder="Enter name"
+              placeholder="Title *"
               id="outlined-basic"
               color="info"
               variant="outlined"
-              {...register("name", { required: true })}
+              {...register("title", { required: true })}
             />
             {errors.name && (
               <FormHelperText error>{errors.name?.message}</FormHelperText>
@@ -74,74 +77,82 @@ const Form = ({
                 color: "#11142d",
               }}
             >
-              Email
+              Description
             </FormHelperText>
-            <TextField
-              fullWidth
+            <TextareaAutosize
+              minRows={5}
               required
-              type="email"
-              placeholder="Enter email"
+              placeholder="Write description"
               color="info"
-              {...register("email", { required: true })}
+              style={{
+                width: "100%",
+                fontSize: "16px",
+                borderColor: "rgba(0,0,0,0.23)",
+                borderRadius: 6,
+                padding: 10,
+                color: "#919191",
+              }}
+              {...register("description", { required: true })}
             />
           </FormControl>
-          <FormControl>
-            <FormHelperText
-              sx={{
-                fontWeight: 500,
-                margin: "10px 0",
-                fontSize: 16,
-                color: "#11142d",
-              }}
-            >
-              Password
-            </FormHelperText>
-            <TextField
-              fullWidth
-              required
-              placeholder="Enter password"
-              id="outlined-basic"
-              color="info"
-              type="password"
-              variant="outlined"
-              // onChange={(e) => setPassword(e.target.value)}
-              {...register("password", { required: true })}
-            />
-            {errors.password && (
-              <FormHelperText error>{errors.password?.message}</FormHelperText>
-            )}
-          </FormControl>
-          <FormControl>
-            <FormHelperText
-              sx={{
-                fontWeight: 500,
-                margin: "10px 0",
-                fontSize: 16,
-                color: "#11142d",
-              }}
-            >
-              Confirm Password
-            </FormHelperText>
-            <TextField
-              fullWidth
-              required
-              placeholder="Confirm password"
-              id="outlined-basic"
-              color="info"
-              type="password"
-              variant="outlined"
-              // onChange={(e) => setConfirmPassword(e.target.value)}
-              {...register("confirmPassword", {
-                required: true,
-              })}
-            />
-            {errors.confirmPassword && (
-              <FormHelperText error>
-                {errors.confirmPassword?.message}
+          <Stack direction="row" gap={4}>
+            <FormControl sx={{ flex: 1 }}>
+              <FormHelperText
+                sx={{
+                  fontWeight: 500,
+                  margin: "10px 0",
+                  fontSize: 16,
+                  color: "#11142D",
+                }}
+              >
+                Property type
               </FormHelperText>
-            )}
-          </FormControl>
-          <FormControl sx={{ flex: 1 }}>
+              <Select
+                variant="outlined"
+                color="info"
+                displayEmpty
+                required
+                inputProps={{ "aria-label": "Without label" }}
+                defaultValue="apartment"
+                {...register("propertyType", { required: true })}
+              >
+                <MenuItem value="apartment">Apartment</MenuItem>
+                <MenuItem value="villa">Villa</MenuItem>
+                <MenuItem value="farmhouse">Farmhouse</MenuItem>
+                <MenuItem value="condos">Condos</MenuItem>
+                <MenuItem value="townhouse">Townhouse</MenuItem>
+                <MenuItem value="duplex">Duplex</MenuItem>
+                <MenuItem value="studio">Studio</MenuItem>
+                <MenuItem value="chalet">Chalet</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl>
+              <FormHelperText
+                sx={{
+                  fontWeight: 500,
+                  margin: "10px 0",
+                  fontSize: 16,
+                  color: "#11142d",
+                }}
+              >
+                Property price
+              </FormHelperText>
+              <TextField
+                fullWidth
+                required
+                type="number"
+                placeholder="0"
+                id="outlined-basic"
+                color="info"
+                variant="outlined"
+                {...register("price", { required: true })}
+              />
+              {errors.name && (
+                <FormHelperText error>{errors.name?.message}</FormHelperText>
+              )}
+            </FormControl>
+          </Stack>
+          <FormControl>
             <FormHelperText
               sx={{
                 fontWeight: 500,
@@ -150,23 +161,59 @@ const Form = ({
                 color: "#11142d",
               }}
             >
-              Select Admin Role
+              Location
             </FormHelperText>
-            <Select
-              variant="outlined"
-              color="info"
-              displayEmpty
+            <TextField
+              fullWidth
               required
-              inputProps={{ "aria-label": "Without label" }}
-              defaultValue="admin"
-              {...register("role", {
-                required: true,
-              })}
-            >
-              <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="superAdmin">Super Admin</MenuItem>
-            </Select>
+              id="outlined-basic"
+              color="info"
+              variant="outlined"
+              {...register("location", { required: true })}
+            />
+            {errors.name && (
+              <FormHelperText error>{errors.name?.message}</FormHelperText>
+            )}
           </FormControl>
+          <Stack direction="column" gap={1} mb={2} justifyContent="center">
+            <Stack direction="row" gap={2}>
+              <Typography
+                color="#11142d"
+                fontSize={16}
+                fontWeight={500}
+                my="10px"
+              >
+                Property photo
+              </Typography>
+              <Button
+                component="label"
+                sx={{
+                  width: "fit-content",
+                  color: "#2ed480",
+                  textTransform: "capitalize",
+                  fontSize: 16,
+                }}
+              >
+                Upload*
+                <input
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  onChange={(e) => {
+                    //@ts-ignore
+                    handleImageChange(e.target.files[0]);
+                  }}
+                ></input>
+              </Button>
+            </Stack>
+            <Typography
+              fontSize={14}
+              color="#808191"
+              sx={{ wordBreak: "break-all" }}
+            >
+              {propertyImage?.name}
+            </Typography>
+          </Stack>
           <CustomButton
             type="submit"
             title={formLoading ? "Submitting..." : "Submit"}

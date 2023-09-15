@@ -10,11 +10,12 @@ import {
 } from "@refinedev/mui";
 
 import {
-  EngineeringOutlined,
-  AnalyticsOutlined,
-  ManageAccountsOutlined,
-  PeopleAltOutlined,
+  AccountCircleOutlined,
   AccountBalanceOutlined,
+  ChatBubbleOutline,
+  PeopleAltOutlined,
+  StarOutlineRounded,
+  VillaOutlined,
 } from "@mui/icons-material";
 
 import CssBaseline from "@mui/material/CssBaseline";
@@ -28,34 +29,22 @@ import routerBindings, {
 import dataProvider from "@refinedev/simple-rest";
 import axios, { AxiosRequestConfig } from "axios";
 import { CredentialResponse } from "interfaces/google";
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from "pages/blog-posts";
-import {
-  CategoryCreate,
-  CategoryEdit,
-  CategoryList,
-  CategoryShow,
-} from "pages/categories";
-import { Login } from "pages/login";
+
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { parseJwt } from "utils/parse-jwt";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import { MuiInferencer } from "@refinedev/inferencer/mui";
 import {
-  AdminCreate,
-  AdminEdit,
-  AdminList,
-  AdminShow,
-  UserAccount,
-  UserContent,
+  AllProperties,
+  Agents,
+  AgentProfile,
+  CreateProperty,
+  EditProperty,
+  PropertyDetails,
+  Login,
+  Home,
+  MyProfile,
 } from "pages";
-
-import logo from "./assets/logo-greetgrid.png";
 
 const axiosInstance = axios.create();
 axiosInstance.interceptors.request.use((request: AxiosRequestConfig) => {
@@ -79,8 +68,8 @@ function App() {
       //save user to MongoDB...
       if (profileObj) {
         const response = await fetch(
-          // "http://localhost:8080/api/v1/superAdmins",
-          "https://greetgrid-admin.onrender.com/api/v1/superAdmins",
+          "http://localhost:8080/api/v1/users",
+          // "https://greetgrid-admin.onrender.com/api/v1/users",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -96,11 +85,11 @@ function App() {
 
         if (response.status === 200) {
           localStorage.setItem(
-            "superAdmin",
+            "user",
             JSON.stringify({
               ...profileObj,
               avatar: profileObj.picture,
-              superAdminid: data._id,
+              userid: data._id,
             })
           );
         } else {
@@ -163,7 +152,7 @@ function App() {
     },
     getPermissions: async () => null,
     getIdentity: async () => {
-      const user = localStorage.getItem("superAdmin");
+      const user = localStorage.getItem("user");
       if (user) {
         return JSON.parse(user);
       }
@@ -180,59 +169,57 @@ function App() {
           <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
           <RefineSnackbarProvider>
             <Refine
-              // dataProvider={dataProvider("http://localhost:8080/api/v1")}
-              dataProvider={dataProvider(
-                "https://greetgrid-admin.onrender.com/api/v1"
-              )}
+              dataProvider={dataProvider("http://localhost:8080/api/v1")}
+              // dataProvider={dataProvider(
+              //   "https://greetgrid-admin.onrender.com/api/v1"
+              // )}
               notificationProvider={notificationProvider}
               routerProvider={routerBindings}
               authProvider={authProvider}
               resources={[
                 {
-                  name: "admins",
-                  icon: <EngineeringOutlined />,
-                  options: { label: "General Administration" },
-                  list: "/admins",
-                  create: "/admins/create",
-                  edit: "/admins/edit/:id",
-                  show: "/admins/show/:id",
+                  name: "properties",
+                  icon: <VillaOutlined />,
+                  options: { label: "Properties" },
+                  list: AllProperties,
+                  create: CreateProperty,
+                  edit: EditProperty,
+                  show: PropertyDetails,
                   meta: {
                     canDelete: true,
                   },
                 },
                 {
-                  name: "user account management",
-                  icon: <ManageAccountsOutlined />,
-                  options: { label: "User Account Management" },
-                  list: "/user-account",
-                },
-                {
-                  name: "user content control",
-                  options: { label: "User Content Control" },
-                  list: "/user-content",
-                },
-                {
-                  name: "app maintenance",
-                  icon: <AccountBalanceOutlined />,
-                  options: { label: "App Maintenance" },
-                  list: MuiInferencer,
-                },
-                {
-                  name: "user support",
+                  name: "agents",
                   icon: <PeopleAltOutlined />,
-                  options: { label: "User Support" },
-                  list: MuiInferencer,
+                  options: { label: "Agents" },
+                  list: Agents,
+                  show: AgentProfile,
                 },
                 {
-                  name: "analitics",
-                  icon: <AnalyticsOutlined />,
-                  list: MuiInferencer,
+                  name: "reviews",
+                  icon: <StarOutlineRounded />,
+                  options: { label: "Reviews" },
+                  list: Home,
+                },
+                {
+                  name: "messages",
+                  icon: <ChatBubbleOutline />,
+                  options: { label: "Messages" },
+                  list: Home,
+                },
+                {
+                  name: "my-profile",
+                  icon: <AccountCircleOutlined />,
+                  options: { label: "My Profile" },
+                  list: MyProfile,
                 },
               ]}
               options={{
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: true,
                 projectId: "4rGHVM-p4dA7f-vACqw6",
+                disableTelemetry: true,
               }}
             >
               <Routes>
@@ -247,17 +234,18 @@ function App() {
                             collapsed={collapsed}
                             icon={
                               collapsed ? (
-                                <img
-                                  src={logo}
-                                  alt="logo"
-                                  width="28px"
-                                  height="28px"
+                                <AccountBalanceOutlined
+                                  sx={{ color: "#000" }}
                                 />
                               ) : (
-                                <img src={logo} alt="logo1" width="32px" />
+                                <AccountBalanceOutlined
+                                  sx={{
+                                    color: "#000",
+                                  }}
+                                />
                               )
                             }
-                            text="Greetgrid"
+                            text="My Dashboard"
                           />
                         )}
                       >
@@ -266,39 +254,27 @@ function App() {
                     </Authenticated>
                   }
                 >
-                  <Route
-                    index
-                    element={<NavigateToResource resource="blog_posts" />}
-                  />
-                  {/* <Route path="/blog-posts">
-                    <Route index element={<BlogPostList />} />
-                    <Route path="create" element={<BlogPostCreate />} />
-                    <Route path="edit/:id" element={<BlogPostEdit />} />
-                    <Route path="show/:id" element={<BlogPostShow />} />
+                  <Route path="/properties">
+                    <Route index element={<AllProperties />} />
+                    <Route path="create" element={<CreateProperty />} />
+                    <Route path="edit/:id" element={<EditProperty />} />
+                    <Route path="show/:id" element={<PropertyDetails />} />
                   </Route>
-                  <Route path="/categories">
-                    <Route index element={<CategoryList />} />
-                    <Route path="create" element={<CategoryCreate />} />
-                    <Route path="edit/:id" element={<CategoryEdit />} />
-                    <Route path="show/:id" element={<CategoryShow />} />
-                  </Route> */}
-                  <Route path="/admins">
-                    <Route index element={<AdminList />} />
-                    <Route path="create" element={<AdminCreate />} />
-                    <Route path="edit/:id" element={<AdminEdit />} />
-                    <Route path="show/:id" element={<AdminShow />} />
+                  <Route path="/agents">
+                    <Route index element={<Agents />} />
+                    <Route path="show/:id" element={<AgentProfile />} />
                   </Route>
-                  <Route path="/user-account">
-                    <Route index element={<UserAccount />} />
-                    <Route path="create" element={<CategoryCreate />} />
-                    <Route path="edit/:id" element={<CategoryEdit />} />
-                    <Route path="show/:id" element={<CategoryShow />} />
+                  <Route path="/">
+                    <Route index element={<Home />} />
                   </Route>
-                  <Route path="/user-content">
-                    <Route index element={<UserContent />} />
-                    <Route path="create" element={<CategoryCreate />} />
-                    <Route path="edit/:id" element={<CategoryEdit />} />
-                    <Route path="show/:id" element={<CategoryShow />} />
+                  <Route path="/reviews">
+                    <Route index element={<Home />} />
+                  </Route>
+                  <Route path="/messages">
+                    <Route index element={<Home />} />
+                  </Route>
+                  <Route path="/my-profile">
+                    <Route index element={<MyProfile />} />
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>

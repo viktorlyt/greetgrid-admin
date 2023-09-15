@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 
 import { CredentialResponse } from "../interfaces/google";
 
-import logo from "../assets/logo-greetgrid.png";
+import logo from "../assets/bike.jpg";
 
 export const Login: React.FC = () => {
   const { mutate: login } = useLogin<CredentialResponse>();

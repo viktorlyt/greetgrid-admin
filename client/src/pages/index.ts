@@ -1,25 +1,21 @@
-import Analitics from "./analitics/analitics";
-import AppMaintenance from "./appMaintenance/appMaintenance";
-import AdminList from "./generalAdmin/AdminList";
-import AdminCreate from "./generalAdmin/AdminCreate";
-import AdminEdit from "./generalAdmin/AdminEdit";
-import AdminShow from "./generalAdmin/AdminShow";
-import AdminCard from "./generalAdmin/AdminCard";
-import UserAccount from "./userAccount/userAccount";
-import UserContent from "./userContent/userContent";
-import UserSupport from "./userSupport/userSupport";
+import Home from "./home/home";
+import Agents from "./agent/agent";
+import MyProfile from "./my-profile/my-profile";
+import AllProperties from "./all-properties/all-properties";
+import AgentProfile from "./agent/agent-profile";
+import CreateProperty from "./all-properties/create-property";
+import EditProperty from "./all-properties/edit-property";
+import PropertyDetails from "./all-properties/property-details";
 import { Login } from "./login";
 
 export {
-    Analitics,
-    AppMaintenance,
-    AdminList,
-    AdminCreate,
-    AdminEdit,
-    AdminShow,
-    AdminCard,
-    UserAccount,
-    UserContent,
-    UserSupport,
+    Agents,
+    MyProfile,
+    AllProperties,
+    AgentProfile,
+    CreateProperty,
+    EditProperty,
+    PropertyDetails,
     Login,
+    Home,
 } 

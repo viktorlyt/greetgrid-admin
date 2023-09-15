@@ -20,7 +20,7 @@ const CustomButton = ({
         flex: fullWidth ? 1 : "unset",
         padding: "10px 15px",
         width: fullWidth ? "100%" : "fit-content",
-        minWidth: 130,
+        minWidth: 170,
         backgroundColor,
         color,
         fontSize: 16,
