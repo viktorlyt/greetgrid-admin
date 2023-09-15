@@ -3,8 +3,8 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 
 import connectDB from "./mongodb/connect.js";
-import superAdminRouter from "./routes/superAdmin.routes.js";
-import adminRouter from "./routes/admin.routes.js";
+import propertyRouter from "./routes/property.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 dotenv.config();
 
@@ -16,8 +16,8 @@ app.get("/", (req, res) => {
   res.send({ message: "hi!" });
 });
 
-app.use("/api/v1/superAdmins", superAdminRouter);
-app.use("/api/v1/admins", adminRouter);
+app.use("/api/v1/properties", propertyRouter);
+app.use("/api/v1/users", userRouter);
 
 const startServer = async () => {
   try {
